@@ -1,20 +1,94 @@
 exports.run = (client, message, args) => {
-	var VC = message.member.voiceChannel;
-    var whatSong = args[1];
-    var dispatcher;
-    if (!VC)
-        return message.reply("MESSAGE IF NOT IN A VOICE CHANNEL")
-		VC.join()
-        .then(connection => {
-            if (whatSong) {
-                dispatcher = connection.playFile('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-            } else {
-                dispatcher = connection.playFile(whatSong);
-            }
+    const { RepeatMode } = require('discord-music-player');
+    
+    client.on('messageCreate', async (message) => {
+        const args = message.content.slice(settings.prefix.length).trim().split(/ +/g);
+        const command = args.shift();
+        let guildQueue = client.player.getQueue(message.guild.id);
+    
+        if(command === 'play') {
+            let queue = client.player.createQueue(message.guild.id);
+            await queue.join(message.member.voice.channel);
+            let song = await queue.play(args.join(' ')).catch(_ => {
+                if(!guildQueue)
+                    queue.stop();
+            });
+        }
+    
+        if(command === 'playlist') {
+            let queue = client.player.createQueue(message.guild.id);
+            await queue.join(message.member.voice.channel);
+            let song = await queue.playlist(args.join(' ')).catch(_ => {
+                if(!guildQueue)
+                    queue.stop();
+            });
+        }
+    
+        if(command === 'skip') {
+            guildQueue.skip();
+        }
+    
+        if(command === 'stop') {
+            guildQueue.stop();
+        }
+    
+        if(command === 'removeLoop') {
+            guildQueue.setRepeatMode(RepeatMode.DISABLED); // or 0 instead of RepeatMode.DISABLED
+        }
+    
+        if(command === 'toggleLoop') {
+            guildQueue.setRepeatMode(RepeatMode.SONG); // or 1 instead of RepeatMode.SONG
+        }
+    
+        if(command === 'toggleQueueLoop') {
+            guildQueue.setRepeatMode(RepeatMode.QUEUE); // or 2 instead of RepeatMode.QUEUE
+        }
+    
+        if(command === 'setVolume') {
+            guildQueue.setVolume(parseInt(args[0]));
+        }
+    
+        if(command === 'seek') {
+            guildQueue.seek(parseInt(args[0]) * 1000);
+        }
+    
+        if(command === 'clearQueue') {
+            guildQueue.clearQueue();
+        }
+    
+        if(command === 'shuffle') {
+            guildQueue.shuffle();
+        }
+    
+        if(command === 'getQueue') {
+            console.log(guildQueue);
+        }
+    
+        if(command === 'getVolume') {
+            console.log(guildQueue.volume)
+        }
+    
+        if(command === 'nowPlaying') {
+            console.log(`Now playing: ${guildQueue.nowPlaying}`);
+        }
+    
+        if(command === 'pause') {
+            guildQueue.setPaused(true);
+        }
+    
+        if(command === 'resume') {
+            guildQueue.setPaused(false);
+        }
+    
+        if(command === 'remove') {
+            guildQueue.remove(parseInt(args[0]));
+        }
+    
+        if(command === 'createProgressBar') {
+            const ProgressBar = guildQueue.createProgressBar();
             
-            dispatcher.on("end", end => {VC.leave()});
-        })
-        .catch(console.error);
-		
-		
+            // [======>              ][00:35/2:20]
+            console.log(ProgressBar.prettier);
+        }
+    })
 }
