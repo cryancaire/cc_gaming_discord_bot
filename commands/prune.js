@@ -1,6 +1,4 @@
-exports.run = (client, message, args) => {
-	const config = require("../conf.json");
-	
+exports.run = (client, message, args) => {	
 	if(message.author.id !== process.env.DISCORD_OWNER_ID) { 
 		console.log("not authorized");
 		return;

@@ -13,11 +13,11 @@ const config = require("./conf.json");
 		['spoilers', '507549095641088010', 'Access to the spoilers channel']
 	];
 client.on("guildMemberAdd", (member) => {
-  console.log(`New User "${member.user.username}" has joined "${member.guild.name}"` );
+  /* console.log(`New User "${member.user.username}" has joined "${member.guild.name}"` );
   member.guild.channels.get(config.welcomeChannel).send(`Welcome **${member.user.username}** to ` + config.serverName + `! Dont forget to check out #` + config.rulesChannel + ` and have a good time!`);
   if (!member.roles.has(config.defaultRole)) {
 	  member.addRole(config.defaultRole).catch(console.error);
-  }
+  } */
 });
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
@@ -33,10 +33,10 @@ fs.readdir("./events/", (err, files) => {
 
 client.on("message", message => {
   if (message.author.bot) return;
-  if(message.content.indexOf(config.prefix) !== 0) return;
+  if(message.content.indexOf(process.env.DISCORD_BOT_PREFIX) !== 0) return;
   
   // This is the best way to define args. Trust me.
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
+  const args = message.content.slice(process.env.DISCORD_BOT_PREFIX).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
 
   // The list of if/else is replaced with those simple 2 lines:

@@ -1,6 +1,4 @@
 exports.run = (client, message, args) => {
-	const config = require("../config.json");
-
 	var VC = message.member.voiceChannel;
     if (!VC)
         return message.reply("MESSAGE IF NOT IN A VOICE CHANNEL")
