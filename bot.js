@@ -36,7 +36,7 @@ client.on("message", message => {
   
   // This is the best way to define args. Trust me.
   const args = message.content.slice(process.env.DISCORD_BOT_PREFIX).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
+  const command = args.shift().toLowerCase().replace(process.env.DISCORD_BOT_PREFIX, '');
 
   // The list of if/else is replaced with those simple 2 lines:
   try {
