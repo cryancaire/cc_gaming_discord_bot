@@ -1,7 +1,7 @@
 exports.run = (client, message, args) => {
 //self assign roles
 //!giveme role
-	const config = require("../config.json");
+	const config = require("../conf.json");
 	const botChannelName = config.botChannelName;
 	
 	 const whatChannel = message.channel.id;

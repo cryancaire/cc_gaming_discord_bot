@@ -1,6 +1,6 @@
 exports.run = (client, message, args) => {
 	//this gets our config vars
-	const config = require("../config.json");
+	const config = require("../conf.json");
 	const botChannelName = config.botChannelName;
 	
 	//grab any arguments... we only care about the first 2 though
