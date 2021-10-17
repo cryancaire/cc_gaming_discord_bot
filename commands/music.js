@@ -8,12 +8,11 @@ exports.run = (client, message, args) => {
         .then(connection => {
             if (whatSong) {
                 dispatcher = connection.playFile('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
-                dispatcher.on("end", end => {VC.leave()});
             } else {
                 dispatcher = connection.playFile(whatSong);
-                dispatcher.on("end", end => {VC.leave()});
             }
             
+            dispatcher.on("end", end => {VC.leave()});
         })
         .catch(console.error);
 		
