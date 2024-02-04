@@ -16,10 +16,12 @@ for (const folder of commandFolders) {
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);
-		if ('data' in command && 'execute' in command) {
-			commands.push(command.data.toJSON());
-		} else {
-			console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+		if ('enabled' in command && command['enabled'] === true)  {
+			if ('data' in command && 'execute' in command) {
+				commands.push(command.data.toJSON());
+			} else {
+				console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+			}
 		}
 	}
 }
@@ -39,6 +41,10 @@ const rest = new REST().setToken(process.env.DISCORD_BOT_TOKEN);
 		);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+		console.log(`Reloaded commands: `)
+		commands.forEach(c => {
+			console.log(`/${c.name}`)
+		});
 	} catch (error) {
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
